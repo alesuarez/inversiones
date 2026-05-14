@@ -112,11 +112,15 @@ Aplicación web **100% client-side** (HTML/CSS/JS vanilla) que simula escenarios
 | `simulate(params)` | simulator.js:1 | Motor financiero principal |
 | `makePoint(age, month, phase, ...)` | simulator.js:178 | Crea un punto de timeline |
 | `monthlyRateFromAnnual(annualPercent)` | utils.js:54 | Convierte tasa anual → mensual |
-| `renderChart(canvasId, investedTL, nonInvestedTL, retirementAge)` | charts.js:3 | Dibuja gráfico Chart.js |
-| `buildRetirementPlugin(retireIdx, retirementAge)` | charts.js:151 | Plugin para línea vertical de retiro |
+| `renderChart(canvasId, investedTL, nonInvestedTL, retirementAge)` | charts.js:4 | Dibuja gráfico Chart.js, reintenta si Chart.js no cargó |
+| `buildRetirementPlugin(retireIdx, retirementAge)` | charts.js:158 | Plugin para línea vertical de retiro |
 | `calcular()` | app.js:20 | Orquestador principal |
 | `renderSummary(result)` | app.js:55 | Renderiza tarjetas de métricas |
 | `renderTable(result)` | app.js:129 | Renderiza tabla de timeline |
+| `compartirSimulacion()` | app.js:75 | Copia URL con parámetros al portapapeles |
+| `buildShareUrl()` | app.js:86 | Construye URL absoluta con query params desde valores del DOM |
+| `buildQueryString()` | app.js:56 | Construye `?e=...&r=...` desde inputs actuales |
+| `readURLParams()` | app.js:68 | Parsea query string al cargar la página |
 | `debounce(fn, delay)` | utils.js:41 | Evita recalculos excesivos |
 | `formatCurrency(value)` | utils.js:1 | "$1.234.567" |
 | `aplicarEscenario(tipo)` | app.js:195 | Carga escenario preconfigurado |
@@ -153,6 +157,12 @@ Aplicación web **100% client-side** (HTML/CSS/JS vanilla) que simula escenarios
 4. **Actualizar la UI** (`js/app.js`): leer nuevos inputs en `calcular()`, mostrar nuevas métricas en `renderSummary()` o nueva tabla en `renderTable()`.
 5. **Actualizar gráficos** (`js/charts.js`): agregar datasets al Chart.js si es necesario.
 6. **Utilidades** (`js/utils.js`): agregar helpers de formateo si hacen falta.
+
+### Eventos y recálculo automático
+- Cada input se vincula con **`input` (debounce 150ms)** + **`change` (inmediato)** en `app.js:318-321`
+- `input` captura cada pulsación de tecla con un pequeño retardo para no saturar
+- `change` captura cambios confirmados (flechas de spinner, Enter, pérdida de foco) y ejecuta `calcular()` al instante
+- `calcular()` regenera todo: simulación, métricas, tabla, gráfico y URL
 
 ## Guía de Estilos Visuales
 

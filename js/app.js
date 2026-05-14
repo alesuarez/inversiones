@@ -315,7 +315,10 @@ function init() {
 
     var inputs = DOM.form.querySelectorAll('input');
     for (var i = 0; i < inputs.length; i++) {
-        inputs[i].addEventListener('input', debounce(calcular, 300));
+        (function(el) {
+            el.addEventListener('input', debounce(calcular, 150));
+            el.addEventListener('change', calcular);
+        })(inputs[i]);
     }
 
     calcular();

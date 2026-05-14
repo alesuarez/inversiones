@@ -1,4 +1,5 @@
 var chartInstance = null;
+var _chartRetry = null;
 
 function renderChart(canvasId, investedTL, nonInvestedTL, retirementAge) {
     var canvas = document.getElementById(canvasId);
@@ -12,11 +13,17 @@ function renderChart(canvasId, investedTL, nonInvestedTL, retirementAge) {
             msg = document.createElement('div');
             msg.className = 'chart-fallback';
             msg.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%;color:#888;font-size:14px;text-align:center;padding:20px';
-            msg.textContent = 'Chart.js no está disponible. Verifica tu conexión a internet.';
+            msg.textContent = 'Cargando gráfico…';
             parent.appendChild(msg);
         }
+        if (_chartRetry) clearTimeout(_chartRetry);
+        _chartRetry = setTimeout(function() {
+            renderChart(canvasId, investedTL, nonInvestedTL, retirementAge);
+        }, 500);
         return;
     }
+
+    if (_chartRetry) { clearTimeout(_chartRetry); _chartRetry = null; }
 
     var fb = canvas.parentElement.querySelector('.chart-fallback');
     if (fb) fb.remove();
