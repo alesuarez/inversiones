@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Retiro / Jubilación</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Simulador de Retiro</h1>
+        <div class="subtitle">Proyecta tu inversión con interés compuesto y simula retiros mensuales</div>
+
+        <!-- Parámetros -->
+        <div class="grid">
+            <div class="input-group">
+                <label>Edad Actual</label>
+                <input type="number" id="edad" value="39" min="1" max="100">
+            </div>
+            <div class="input-group">
+                <label>Edad de Retiro</label>
+                <input type="number" id="retiro" value="65" min="1" max="100">
+            </div>
+            <div class="input-group">
+                <label>Capital Inicial ($)</label>
+                <input type="number" id="capital" value="10000" min="0">
+            </div>
+            <div class="input-group">
+                <label>Interés Anual (%)</label>
+                <input type="number" id="interes" value="8" step="0.1" min="0" max="100">
+            </div>
+            <div class="input-group">
+                <label>Aporte Mensual ($)</label>
+                <input type="number" id="aporte" value="500" min="0">
+            </div>
+            <div class="input-group">
+                <label>Retiro por Mes ($)</label>
+                <input type="number" id="retiroMensual" value="2000" min="0">
+            </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="btn-row">
+            <button class="btn-primary" onclick="calcular()">Calcular</button>
+            <button class="btn-secondary" onclick="resetear()">Restablecer</button>
+            <span class="scenario-label">Escenarios:</span>
+            <button class="btn-scenario" onclick="aplicarEscenario('conservador')">Conservador 4%</button>
+            <button class="btn-scenario" onclick="aplicarEscenario('moderado')">Moderado 8%</button>
+            <button class="btn-scenario" onclick="aplicarEscenario('agresivo')">Agresivo 12%</button>
+        </div>
+
+        <!-- Resumen -->
+        <div class="summary">
+            <div class="card">
+                <div class="label">Capital Total Aportado</div>
+                <div class="value" id="totalAportado">$0</div>
+            </div>
+            <div class="card">
+                <div class="label">Total Retirado</div>
+                <div class="value warn" id="totalRetirado">$0</div>
+            </div>
+            <div class="card">
+                <div class="label">Interés Generado Total</div>
+                <div class="value interest" id="interesTotal">$0</div>
+            </div>
+            <div class="card">
+                <div class="label">Capital Máximo Alcanzado</div>
+                <div class="value gain" id="capitalMaximo">$0</div>
+            </div>
+            <div class="card">
+                <div class="label">Valor al Retiro (con interés)</div>
+                <div class="value gain" id="valorAlRetiro">$0</div>
+            </div>
+            <div class="card">
+                <div class="label">Valor al Retiro (sin interés)</div>
+                <div class="value" id="valorAlRetiroNI">$0</div>
+            </div>
+            <div class="card">
+                <div class="label">Diferencia (interés compuesto)</div>
+                <div class="value interest" id="diferenciaAbsoluta">$0</div>
+            </div>
+            <div class="card">
+                <div class="label">Rendimiento Porcentual</div>
+                <div class="value interest" id="diferenciaPorcentual">0%</div>
+            </div>
+            <div class="card">
+                <div class="label">Retiro Mensual</div>
+                <div class="value warn" id="retiroMensualDisplay">$0</div>
+            </div>
+            <div class="card">
+                <div class="label">Interés Mensual al Retiro</div>
+                <div class="value gain" id="interesMensualRetiro">$0</div>
+            </div>
+            <div class="card" id="cardExplicacion" style="grid-column:1/-1;background:rgba(251,191,36,0.08);border-color:rgba(251,191,36,0.15)">
+                <div class="label" id="explicacionLabel">¿Por qué el capital crece o decrece?</div>
+                <div class="value" id="explicacionTexto" style="font-size:13px;font-weight:400;color:#ddd;margin-top:2px"></div>
+            </div>
+            <div class="card">
+                <div class="label">Duración (con interés)</div>
+                <div class="value info" id="duracionRetiro">—</div>
+            </div>
+            <div class="card">
+                <div class="label">Edad Agotamiento (con interés)</div>
+                <div class="value info" id="edadAgotamiento">—</div>
+            </div>
+            <div class="card">
+                <div class="label">Duración (sin interés)</div>
+                <div class="value info" id="duracionSinInteres">—</div>
+            </div>
+            <div class="card">
+                <div class="label">Edad Agotamiento (sin interés)</div>
+                <div class="value info" id="edadSinInteres">—</div>
+            </div>
+        </div>
+
+        <!-- Gráfico -->
+        <div class="chart-wrapper">
+            <canvas id="chart"></canvas>
+        </div>
+
+        <!-- Tabla -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Edad</th>
+                        <th>Mes</th>
+                        <th>Fase</th>
+                        <th>Capital (con interés)</th>
+                        <th>Interés Generado</th>
+                        <th>Aporte</th>
+                        <th>Retiro</th>
+                        <th>Capital (sin interés)</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaBody"></tbody>
+            </table>
+        </div>
+
+        <div class="footer">Los resultados son estimativos y no constituyen asesoría financiera. Los datos se guardan automáticamente en tu navegador.</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/simulator.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
