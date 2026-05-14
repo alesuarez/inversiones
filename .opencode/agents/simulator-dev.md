@@ -125,9 +125,12 @@ Aplicación web **100% client-side** (HTML/CSS/JS vanilla) que simula escenarios
 ## Estado Actual (Implementado vs Requerimientos)
 
 ### ✅ Implementado
-- RF-001 a RF-016 (edad, capital, aporte, rendimiento, conversión interés, acumulación, retiro, comparación sin inversión, métricas, gráfico, tabla, recálculo automático, escenarios, responsive)
-- RV-001 a RV-004 (dashboard, gráfico comparativo, colores semánticos, tooltips)
-- RNF-001 a RNF-005 (performance, precisión, sin backend, desacoplamiento, mantenibilidad)
+| ID | Feature |
+|---|---|
+| RF-001 a RF-016 | Todos los requerimientos funcionales |
+| RV-001 a RV-004 | Todos los requerimientos visuales |
+| RNF-001 a RNF-005 | Todos los requerimientos no funcionales |
+| MF-006 | Compartir simulación vía URL con query params + botón copiar |
 
 ### ❌ No implementado / Mejoras pendientes
 | ID | Feature | Prioridad |
@@ -138,7 +141,6 @@ Aplicación web **100% client-side** (HTML/CSS/JS vanilla) que simula escenarios
 | MF-003 | Simulación Monte Carlo (múltiples escenarios aleatorios) | Baja |
 | MF-004 | Exportación a PDF / CSV / Excel | Media |
 | MF-005 | Persistencia de múltiples simulaciones (no solo la última) | Media |
-| MF-006 | Compartir simulación vía URL con parámetros en query string | Baja |
 | RNF-002 | Usar Big.js para precisión financiera | Baja |
 | — | Tests unitarios (no existe suite de tests) | Media |
 | — | Migrar a ES6 modules (ESM) para mejor organización | Baja |

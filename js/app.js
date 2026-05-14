@@ -49,6 +49,58 @@ function calcular() {
     renderTable(currentResult);
     renderChart('chart', currentResult.invested.timeline, currentResult.nonInvested.timeline, retirementAge);
     saveToStorage(params);
+    updateURL(params);
+}
+
+// ── URL params (compartir) ──
+function updateURL(params) {
+    var q = '?e=' + params.currentAge + '&r=' + params.retirementAge +
+            '&c=' + params.initialCapital + '&i=' + params.annualReturnRate +
+            '&a=' + params.monthlyContribution + '&w=' + params.monthlyWithdrawal;
+    if (history.replaceState) {
+        history.replaceState(null, '', q);
+    }
+}
+
+function readURLParams() {
+    var p = location.search.substr(1).split('&');
+    var map = {};
+    for (var i = 0; i < p.length; i++) {
+        var kv = p[i].split('=');
+        if (kv.length === 2) map[kv[0]] = decodeURIComponent(kv[1]);
+    }
+    return map;
+}
+
+function compartirSimulacion() {
+    var url = location.href.split('?')[0] + location.search;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+            mostrarToast();
+        }).catch(function() {
+            fallbackCopiar(url);
+        });
+    } else {
+        fallbackCopiar(url);
+    }
+}
+
+function mostrarToast() {
+    var toast = document.getElementById('shareToast');
+    if (!toast) return;
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2000);
+}
+
+function fallbackCopiar(url) {
+    var ta = document.createElement('textarea');
+    ta.value = url;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); mostrarToast(); } catch(e) {}
+    document.body.removeChild(ta);
 }
 
 // ── Renderizar resumen ──
@@ -224,14 +276,24 @@ function resetear() {
 // ── Init ──
 function init() {
     cacheDOM();
-    var saved = loadFromStorage();
-    if (saved) {
-        if (saved.currentAge && DOM.edad) DOM.edad.value = saved.currentAge;
-        if (saved.retirementAge && DOM.retiro) DOM.retiro.value = saved.retirementAge;
-        if (saved.initialCapital !== undefined && DOM.capital) DOM.capital.value = saved.initialCapital;
-        if (saved.annualReturnRate !== undefined && DOM.interes) DOM.interes.value = saved.annualReturnRate;
-        if (saved.monthlyContribution !== undefined && DOM.aporte) DOM.aporte.value = saved.monthlyContribution;
-        if (saved.monthlyWithdrawal !== undefined && DOM.retiroMensual) DOM.retiroMensual.value = saved.monthlyWithdrawal;
+    var urlParams = readURLParams();
+    if (urlParams.e) {
+        if (DOM.edad) DOM.edad.value = urlParams.e;
+        if (DOM.retiro) DOM.retiro.value = urlParams.r || 65;
+        if (DOM.capital) DOM.capital.value = urlParams.c || 0;
+        if (DOM.interes) DOM.interes.value = urlParams.i || 0;
+        if (DOM.aporte) DOM.aporte.value = urlParams.a || 0;
+        if (DOM.retiroMensual) DOM.retiroMensual.value = urlParams.w || 0;
+    } else {
+        var saved = loadFromStorage();
+        if (saved) {
+            if (saved.currentAge && DOM.edad) DOM.edad.value = saved.currentAge;
+            if (saved.retirementAge && DOM.retiro) DOM.retiro.value = saved.retirementAge;
+            if (saved.initialCapital !== undefined && DOM.capital) DOM.capital.value = saved.initialCapital;
+            if (saved.annualReturnRate !== undefined && DOM.interes) DOM.interes.value = saved.annualReturnRate;
+            if (saved.monthlyContribution !== undefined && DOM.aporte) DOM.aporte.value = saved.monthlyContribution;
+            if (saved.monthlyWithdrawal !== undefined && DOM.retiroMensual) DOM.retiroMensual.value = saved.monthlyWithdrawal;
+        }
     }
 
     var inputs = DOM.form.querySelectorAll('input');
