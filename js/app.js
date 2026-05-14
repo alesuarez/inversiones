@@ -53,12 +53,21 @@ function calcular() {
 }
 
 // ── URL params (compartir) ──
+function buildQueryString() {
+    cacheDOM();
+    var e = encodeURIComponent(DOM.edad.value || 39);
+    var r = encodeURIComponent(DOM.retiro.value || 65);
+    var c = encodeURIComponent(DOM.capital.value || 0);
+    var i = encodeURIComponent(DOM.interes.value || 0);
+    var a = encodeURIComponent(DOM.aporte.value || 0);
+    var w = encodeURIComponent(DOM.retiroMensual.value || 0);
+    return '?e=' + e + '&r=' + r + '&c=' + c + '&i=' + i + '&a=' + a + '&w=' + w;
+}
+
 function updateURL(params) {
-    var q = '?e=' + params.currentAge + '&r=' + params.retirementAge +
-            '&c=' + params.initialCapital + '&i=' + params.annualReturnRate +
-            '&a=' + params.monthlyContribution + '&w=' + params.monthlyWithdrawal;
+    var q = buildQueryString();
     if (history.replaceState) {
-        history.replaceState(null, '', q);
+        try { history.replaceState(null, '', q); } catch(e) {}
     }
 }
 
@@ -73,7 +82,7 @@ function readURLParams() {
 }
 
 function compartirSimulacion() {
-    var url = location.href.split('?')[0] + location.search;
+    var url = buildShareUrl();
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).then(function() {
             mostrarToast();
@@ -83,6 +92,14 @@ function compartirSimulacion() {
     } else {
         fallbackCopiar(url);
     }
+}
+
+function buildShareUrl() {
+    var base = location.protocol + '//' + location.host + location.pathname;
+    base = base.replace(/\/index\.html$/i, '');
+    base = base.replace(/\/+$/, '');
+    var q = buildQueryString();
+    return base + '/' + q.replace(/^\//, '');
 }
 
 function mostrarToast() {
