@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6be89f"/>
+      <stop offset="100%" stop-color="#2d9e5e"/>
+    </linearGradient>
+  </defs>
+  <path d="M48 42 Q12 28 2 44 Q14 46 48 42" fill="#60a5fa" opacity="0.7"/>
+  <path d="M52 42 Q88 28 98 44 Q86 46 52 42" fill="#60a5fa" opacity="0.7"/>
+  <path d="M48 48 Q18 38 6 50 Q18 52 48 48" fill="#93c5fd" opacity="0.5"/>
+  <path d="M52 48 Q82 38 94 50 Q82 52 52 48" fill="#93c5fd" opacity="0.5"/>
+  <rect x="28" y="44" width="44" height="28" rx="4" fill="url(#bill)" stroke="#1e7e47" stroke-width="1.5"/>
+  <rect x="25" y="48" width="44" height="28" rx="4" fill="#5be08e" stroke="#1e7e47" stroke-width="1.5"/>
+  <rect x="31" y="52" width="44" height="28" rx="4" fill="#6be89f" stroke="#1e7e47" stroke-width="1.5"/>
+  <text x="50" y="72" font-family="Arial,sans-serif" font-size="28" font-weight="bold" fill="#fff" text-anchor="middle">$</text>
+</svg>
