@@ -178,26 +178,6 @@ button {
     background: rgba(255, 255, 255, 0.12);
 }
 
-.btn-scenario {
-    background: rgba(251, 191, 36, 0.12);
-    color: #fbbf24;
-    border: 1px solid rgba(251, 191, 36, 0.2);
-    font-size: 12px;
-    padding: 6px 14px;
-}
-
-.btn-scenario:hover {
-    background: rgba(251, 191, 36, 0.2);
-}
-
-.scenario-label {
-    font-size: 12px;
-    color: #888;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
 /* ── Gráfico ── */
 .chart-wrapper {
     position: relative;

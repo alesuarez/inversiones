@@ -10,7 +10,7 @@ Aplicación web estática para simular escenarios financieros de retiro mediante
 - Gráfico interactivo con Chart.js
 - Tabla detallada año a año
 - Métricas: capital máximo, interés generado, duración del retiro, edad de agotamiento
-- Escenarios preconfigurados: Conservador (4%), Moderado (8%), Agresivo (12%)
+- Compartir simulación vía link con parámetros en URL
 - Recalculo automático al modificar parámetros
 - Persistencia en LocalStorage
 - Diseño responsive

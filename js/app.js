@@ -260,23 +260,6 @@ function findClosest(timeline, month) {
     return null;
 }
 
-// ── Escenarios preconfigurados ──
-function aplicarEscenario(tipo) {
-    var escenarios = {
-        conservador: { interes: 4, aporte: 300 },
-        moderado: { interes: 8, aporte: 500 },
-        agresivo: { interes: 12, aporte: 800 }
-    };
-
-    var esc = escenarios[tipo];
-    if (!esc) return;
-
-    cacheDOM();
-    DOM.interes.value = esc.interes;
-    DOM.aporte.value = esc.aporte;
-    calcular();
-}
-
 // ── Reset ──
 function resetear() {
     cacheDOM();
